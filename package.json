@@ -13,12 +13,17 @@
     "bootstrap": "^5.3.2",
     "mdb-react-ui-kit": "^6.2.0"
   },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "npx react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
+"scripts": {
+  "start": "react-scripts start",
+  "build": "react-scripts build",
+  "test": "react-scripts test",
+  "eject": "react-scripts eject"
+},
+"engines": {
+  "node": "24.x"
+}
+
+,
   "eslintConfig": {
     "extends": [
       "react-app",
