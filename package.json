@@ -21,9 +21,10 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
-  },"engines": {
-  "node": "24.x"
-},
+  },
+  "engines": {
+    "node": "24.x"
+  },
   "eslintConfig": {
     "extends": [
       "react-app",
