@@ -1,0 +1,83 @@
+{
+    "user":[
+        {
+            "id":1,
+            "fname":"jose",
+            "lname": "manzano",
+            "email": "jmanzanosalzar1@mail.ec",
+            "password": "12345",
+            "role": "admin",
+            "creation": "02-11-2026"
+        },
+        {
+            "id":2,
+            "fname":"jose",
+            "lname": "manzano",
+            "email": "jmanzanosalzar@mail.ec",
+            "password": "12345",
+            "role": "user",
+            "creation": "02-11-2026"
+        }
+
+    ], 
+
+        "task":[
+        {
+            "id":1,
+            "title":"Frontend Sprint",
+            "description": "Finish the layout of the website",
+            "status": "finished",
+            "team": "engineering",
+            "creation": "02-11-2026",
+            "creation_due": "03-11-2026",
+            "priority": "medium"
+        },
+        {
+            "id":2,
+            "title":"Frontend backend",
+            "description": "Start the backend of the website",
+            "status": "pending",
+            "team": "engineering",
+            "creation": "02-11-2026",
+            "creation_due": "04-11-2026",
+            "priority": "medium"
+        }
+
+    ]
+    , 
+
+        "role":[
+        {
+            "id":1,
+            "name":"Frontend Developer",
+            "description":"In charge of APIS and Databse"
+           
+        },
+        {
+            "id":2,
+            "name":"Backend Developer",
+            "description":"In charge of CSS and JS"
+        }
+
+    ]
+, 
+
+        "team":[
+        {
+            "id":1,
+            "name":"Frontend Team",
+            "description":"In charge of APIS and Databse",
+            "email": "jmanzanosalzar1@mail.ec"
+           
+        },
+        {
+            "id":2,
+            "name":"Backend Team",
+            "description":"In charge of CSS and JS",
+            "email": "jmanzanosalzar1@mail.ec"
+            
+        }
+
+    ]
+}
+
