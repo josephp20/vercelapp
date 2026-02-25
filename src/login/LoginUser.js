@@ -96,7 +96,10 @@ export default function Login(){
                 </div>
 
                 <div className="form-group">
-                  <button type="submit" className="btn btn-primary btn-block">
+                  <button 
+                   type="submit"
+                  disabled={loading}
+                  className="btn btn-primary btn-block">
                     Log In
                   </button>
                 </div>
