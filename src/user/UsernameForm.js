@@ -14,6 +14,13 @@ export default function UserForm(){
     //update
     const [editingId, setEditingId] = useState(null);
 
+ const clearForm = () => {
+    setEditingId(null);
+    setNewFname("");
+    setNewLname("");
+    setNewMail("");
+    setNewPassword("");
+  };
 
     /*Create User*/
     const addUser = async () => {
@@ -43,6 +50,9 @@ export default function UserForm(){
             setNewMail("");
             setNewPassword("");
             setRole("user"); // start
+
+            //---------------
+            clearForm();
         }
     }
 
@@ -186,7 +196,7 @@ export default function UserForm(){
 
 
                 <div class="d-flex justify-content-end pt-3">
-                   <button  type="button"  class="btn btn-light btn-lg"><a href="/user">Clear</a></button>
+                   <button  type="button"  class="btn btn-light btn-lg"  onClick={clearForm} >Clear</button>
                   <button
                         onClick={editingId ? updateUser : addUser}
                         type="button"

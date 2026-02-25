@@ -60,11 +60,11 @@ function App() {
               <li className="nav-item">
                 <Link className="nav-link" to="/role">Roles</Link>
               </li>
-              {/* Team pending 
+              
               <li className="nav-item">
                 <Link className="nav-link" to="/team">Team</Link>
               </li>
-              */}
+             
 
               <li className="nav-item">
                 <Link className="nav-link" to="/signup">Signup</Link>
