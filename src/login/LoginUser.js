@@ -106,17 +106,8 @@ export default function Login() {
                 </div>
 
                 <div className="form-group">
-<<<<<<< HEAD
-                  <button
-                    type="submit"
-                    disabled={loading}
-                    className="btn btn-primary w-100"
-                  >
-                    {loading ? "Logging in..." : "Log In"}
-=======
                   <button type="submit" className="btn btn-primary btn-block">
                     Log In
->>>>>>> parent of a847c3a2 (login error fix try1)
                   </button>
                 </div>
               </form>
