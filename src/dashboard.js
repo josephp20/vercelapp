@@ -29,7 +29,7 @@ export default function TaskDashboard() {
   //list task
 
     const [tasks, setTasks] = useState([]);
-  const [editingId, setEditingId] = useState(null);
+
   // -------------------------------
   // listing tasks
   useEffect(() => {
@@ -44,10 +44,6 @@ export default function TaskDashboard() {
     } else {
       setTasks(data);
     }
-  };
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    window.location.href = "/login";
   };
 
   return (

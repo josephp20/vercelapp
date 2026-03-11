@@ -70,7 +70,7 @@ function App() {
               </li>
               
               <li className="nav-item">
-                <Link className="nav-link" to="/user">Tasks</Link>
+                <Link className="nav-link" to="/task">Tasks</Link>
               </li>
 
               <li className="nav-item">

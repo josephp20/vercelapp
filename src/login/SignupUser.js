@@ -30,7 +30,7 @@ const registerUser = async (e) => {
 
   setLoading(true);
 
-  const { data: authData, error: authError } = await supabase.auth.signUp({
+  const { error: authError } = await supabase.auth.signUp({
     email: cleanEmail,
     password: cleanPassword,
   });
