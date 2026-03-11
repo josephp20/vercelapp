@@ -1,5 +1,3 @@
-import ProtectedRoute from "./auth/ProtectedRoute";
-
 import { BrowserRouter, Route, Routes, Link } from 'react-router-dom';
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'; // needed for collapse
@@ -53,22 +51,19 @@ function App() {
           >
             <span className="navbar-toggler-icon"></span>
           </button>
-           
+
           <div className="collapse navbar-collapse" id="navbarTogglerDemo01">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+              <li className="nav-item">
+                <Link className="nav-link" to="/user">Users</Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/role">Roles</Link>
+              </li>
               
               <li className="nav-item">
-                <Link className="nav-link" to="/user">Users (No access)</Link>
+                <Link className="nav-link" to="/team">Team</Link>
               </li>
-              <li className="nav-item">
-                <Link className="nav-link" to="/role">Roles (No access)</Link>
-              </li>
-              
-              <li className="nav-item">
-                <Link className="nav-link" to="/team">Team (No access)</Link>
-              </li>
-              {/*
-              */}
              
 
               <li className="nav-item">
@@ -87,33 +82,28 @@ function App() {
 
       {/* Routes */}
       <div className="container">
-      <Routes>
-          {/* PUBLIC */}
+        <Routes>
+          <Route path="/" element={<TaskForm />} />
+          <Route path="/task/create" element={<CreateTask />} />
+          <Route path="/task/edit/:taskid" element={<EditTask />} />
+          <Route path="/task/view/:taskid" element={<ViewTask />} />
+
+          <Route path="/user" element={<UserForm />} />
+          <Route path="/user/create" element={<UserCreate />} />
+          <Route path="/user/view/1" element={<ViewUser />} />
+          <Route path="/user/edit/1" element={<EditUser />} />
           <Route path="/signup" element={<SignUser />} />
           <Route path="/login" element={<LoginUser />} />
 
-          {/* PROTECTED */}
-          <Route element={<ProtectedRoute />}>
-            <Route path="/" element={<TaskForm />} />
-            <Route path="/task/create" element={<CreateTask />} />
-            <Route path="/task/edit/:taskid" element={<EditTask />} />
-            <Route path="/task/view/:taskid" element={<ViewTask />} />
+          <Route path="/team" element={<TeamForm />} />
+          <Route path="/team/create" element={<CreateTeam />} />
+          <Route path="/team/view/1" element={<ViewTeam />} />
+          <Route path="/team/edit/1" element={<EditTeam />} />
 
-            <Route path="/user" element={<UserForm />} />
-            <Route path="/user/create" element={<UserCreate />} />
-            <Route path="/user/view/:userid" element={<ViewUser />} />
-            <Route path="/user/edit/:userid" element={<EditUser />} />
-
-            <Route path="/team" element={<TeamForm />} />
-            <Route path="/team/create" element={<CreateTeam />} />
-            <Route path="/team/view/:teamid" element={<ViewTeam />} />
-            <Route path="/team/edit/:teamid" element={<EditTeam />} />
-
-            <Route path="/role" element={<RoleForm />} />
-            <Route path="/role/create" element={<CreateRole />} />
-            <Route path="/role/view/:roleid" element={<ViewRole />} />
-            <Route path="/role/edit/:roleid" element={<EditRole />} />
-          </Route>
+          <Route path="/role" element={<RoleForm />} />
+          <Route path="/role/create" element={<CreateRole />} />
+          <Route path="/role/view/1" element={<ViewRole />} />
+          <Route path="/role/edit/1" element={<EditRole />} />
         </Routes>
       </div>
     </BrowserRouter>
