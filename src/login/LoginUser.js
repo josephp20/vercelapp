@@ -1,7 +1,10 @@
 import { useState } from "react";
 import { supabase } from "../supabaseClient";
+import { useNavigate } from "react-router-dom";
 
-export default function Login(){
+export default function LoginUser() {
+
+  const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -26,67 +29,73 @@ export default function Login(){
 
     setLoading(true);
 
-    // Buscar usuario
-    const { data: user, error } = await supabase
-      .from("users")
-      .select("*")
-      .eq("email", cleanEmail)
-      .maybeSingle();
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: cleanEmail,
+      password: cleanPassword,
+    });
 
     setLoading(false);
 
     if (error) {
-      console.error("Login error:", error);
-      setErrorMsg("Error verifying user.");
+      setErrorMsg("Incorrect email or password.");
       return;
     }
 
-    if (!user) {
-      setErrorMsg("User does not exist.");
-      return;
-    }
+    setSuccessMsg("Login successful!");
 
-    if (user.password !== cleanPassword) {
-      setErrorMsg("Incorrect password.");
-      return;
-    }
-
-    // Login sucess
-    setSuccessMsg(`Welcome ${user.fname} ${user.lname}!`);
+    setTimeout(() => {
+      navigate("/");
+    }, 1000);
   };
-    return(
 
-<div className="container">
+  return (
+    <div className="container">
+
       <br />
-      
       <hr />
 
       <div className="row justify-content-center">
+
         <div className="col-md-6">
+
           <div className="card">
+
             <header className="card-header">
-              <h4 className="card-title mt-2">Welcome to Task Tracker</h4>
+              <h4 className="card-title mt-2">
+                Welcome to Task Tracker
+              </h4>
             </header>
 
             <article className="card-body">
-              {/*Confirmation Messages*/}
-              {successMsg && <div className="alert alert-success">{successMsg}</div>}
-              {errorMsg && <div className="alert alert-danger">{errorMsg}</div>}
+
+              {successMsg && (
+                <div className="alert alert-success">
+                  {successMsg}
+                </div>
+              )}
+
+              {errorMsg && (
+                <div className="alert alert-danger">
+                  {errorMsg}
+                </div>
+              )}
+
               <form onSubmit={handleLogin}>
 
                 <div className="form-group">
                   <label>Email address</label>
-                 <input
+
+                  <input
                     type="email"
                     className="form-control"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
-                
 
                 <div className="form-group">
                   <label>Password</label>
+
                   <input
                     type="password"
                     className="form-control"
@@ -95,27 +104,28 @@ export default function Login(){
                   />
                 </div>
 
-                <div className="form-group">
-<<<<<<< HEAD
-                  <button type="submit" className="btn btn-primary btn-block">
-=======
-                  <button 
-                   type="submit"
-                  disabled={loading}
-                  className="btn btn-primary btn-block">
->>>>>>> parent of b92078e5 (solving login-signup)
-                    Log In
+                <div className="form-group mt-3">
+
+                  <button
+                    type="submit"
+                    className="btn btn-primary btn-block"
+                    disabled={loading}
+                  >
+                    {loading ? "Logging in..." : "Log In"}
                   </button>
+
                 </div>
 
               </form>
+
             </article>
 
-            
           </div>
+
         </div>
+
       </div>
+
     </div>
-       
-    );
+  );
 }
