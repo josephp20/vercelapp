@@ -31,13 +31,38 @@ import ViewRole from './role/ViewRole';
 import EditRole from './role/EditRole';
 
 import TaskDashboard from './dashboard';
+import { useEffect, useState } from 'react';
 
 import './App.css';
 
+
 function App() {
+  //Session permission-------------------------------------------------
+  const [session, setSession] = useState(null);
+  
+  useEffect(() => {
+    const getSession = async () => {
+      const { data } = await supabase.auth.getSession();
+      setSession(data.session);
+    };
+    
+    //-------------------------------------------------
+    getSession();
+    
+    //Session verify-------------------------------------------------
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+    //-------------------------------------------------
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
+    setSession(null);
     window.location.href = "/login";
   };
 
@@ -48,9 +73,6 @@ function App() {
       <nav className="navbar navbar-expand-lg navbar-dark bg-primary mb-5 py-4">
         <div className="container-fluid">
 
-          <Link className="navbar-brand" to="/">
-            Task Manager
-          </Link>
 
           <button
             className="navbar-toggler"
@@ -63,33 +85,46 @@ function App() {
 
           <div className="collapse navbar-collapse" id="navbarTogglerDemo01">
 
-            <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+            {/*---------------Adding the menu Permission---------------*/}
+              <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+                {session && (
+                  <>
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/">Task Manager</Link>
+                    </li>
 
-              <li className="nav-item">
-                <Link className="nav-link" to="/user">Users</Link>
-              </li>
-              
-              <li className="nav-item">
-                <Link className="nav-link" to="/task">Tasks</Link>
-              </li>
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/user">Users</Link>
+                    </li>
 
-              <li className="nav-item">
-                <Link className="nav-link" to="/role">Roles</Link>
-              </li>
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/task">Tasks</Link>
+                    </li>
 
-              <li className="nav-item">
-                <Link className="nav-link" to="/team">Team</Link>
-              </li>
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/role">Roles</Link>
+                    </li>
 
-              <li className="nav-item">
-                <Link className="nav-link" to="/signup">Signup</Link>
-              </li>
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/team">Team</Link>
+                    </li>
+                  </>
+                )}
 
-              <li className="nav-item">
-                <Link className="nav-link" to="/login">Login</Link>
-              </li>
+                {!session && (
+                  <>
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/signup">Signup</Link>
+                    </li>
 
-            </ul>
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/login">Login</Link>
+                    </li>
+                  </>
+                )}
+
+              </ul>
+            {/*------------------------------*/}
 
             {/* Logout */}
             <button
@@ -102,6 +137,9 @@ function App() {
           </div>
         </div>
       </nav>
+
+
+      
 
       {/* Routes */}
       <div className="container">
