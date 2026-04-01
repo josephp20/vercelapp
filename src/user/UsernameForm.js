@@ -14,6 +14,12 @@ export default function UserForm(){
     //update
     const [editingId, setEditingId] = useState(null);
 
+    //-----------------------------
+    //adding permission:
+    const [currentUser, setCurrentUser] = useState(null);
+    const [currentRole, setCurrentRole] = useState("");
+    //-----------------------------
+
  const clearForm = () => {
     setEditingId(null);
     setNewFname("");
@@ -58,6 +64,62 @@ export default function UserForm(){
 
 
 
+    /*List User with permission (Testing)
+    
+    const ListUser = async () => {
+  // get current session
+  const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+
+  if (sessionError || !sessionData.session) {
+    console.error("No active session", sessionError);
+    return;
+  }
+
+  const loggedEmail = sessionData.session.user.email;
+
+  //user from users table
+  const { data: loggedUser, error: loggedUserError } = await supabase
+    .from("users")
+    .select("*")
+    .eq("email", loggedEmail)
+    .single();
+
+  if (loggedUserError) {
+    console.error("Error getting current user:", loggedUserError);
+    return;
+  }
+
+  // save user and role
+  setCurrentUser(loggedUser);
+  setCurrentRole(loggedUser.role);
+
+  if (loggedUser.role === "admin") {
+    const { data, error } = await supabase.from("users").select("*");
+
+    if (error) {
+      console.error("no user", error);
+      alert("no data");
+    } else {
+      setUsersAll(data);
+    }
+  } 
+  //user = see himself
+  else {
+    const { data, error } = await supabase
+      .from("users")
+      .select("*")
+      .eq("email", loggedEmail);
+
+    if (error) {
+      console.error("no user", error);
+      alert("no data");
+    } else {
+      setUsersAll(data);
+    }
+  }
+};
+    
+    */
     /*List User*/
 
     useEffect(()=> {
@@ -73,6 +135,8 @@ export default function UserForm(){
             setUsersAll(data)
         }
     }
+
+
 
 
     /*Delete User*/
@@ -170,23 +234,42 @@ export default function UserForm(){
                 <div class="d-md-flex justify-content-start align-items-center mb-4 py-2">
 
 
-                  <div class="form-check form-check-inline mb-0 me-4">
-                    <input class="form-check-input border-secondary"
-                    type="radio"
-                    value="user"
-                    checked={role === "user"}
-                    onChange={(e) => setRole(e.target.value)}/>{" "}
-                    <label class="form-check-label" >User</label>
-                  </div>
+                  {currentRole === "admin" ? (
+                  <>
+                    <div className="form-check form-check-inline mb-0 me-4">
+                      <input
+                        className="form-check-input border-secondary"
+                        type="radio"
+                        value="user"
+                        checked={role === "user"}
+                        onChange={(e) => setRole(e.target.value)}
+                      />
+                      <label className="form-check-label">User</label>
+                    </div>
 
-                  <div class="form-check form-check-inline mb-0 me-4">
-                    <input class="form-check-input border-secondary"
-                    type="radio"
-                    value="admin"
-                    checked={role === "admin"}
-                    onChange={(e) => setRole(e.target.value)}/>{" "}
-                    <label class="form-check-label">Admin</label>
+                    <div className="form-check form-check-inline mb-0 me-4">
+                      <input
+                        className="form-check-input border-secondary"
+                        type="radio"
+                        value="admin"
+                        checked={role === "admin"}
+                        onChange={(e) => setRole(e.target.value)}
+                      />
+                      <label className="form-check-label">Admin</label>
+                    </div>
+                  </>
+                ) : (
+                  <div className="form-check form-check-inline mb-0 me-4">
+                    <input
+                      className="form-check-input border-secondary"
+                      type="radio"
+                      value="user"
+                      checked={true}
+                      readOnly
+                    />
+                    <label className="form-check-label">User</label>
                   </div>
+                )}
 
 
                   

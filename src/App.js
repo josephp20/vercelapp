@@ -126,13 +126,18 @@ function App() {
               </ul>
             {/*------------------------------*/}
 
-            {/* Logout */}
-            <button
+           {/* Logout */}
+
+            {/*------------------------------*/}
+            {session && (
+              <button
               className="btn btn-danger"
               onClick={handleLogout}
-            >
-              Exit
-            </button>
+              >
+                Exit
+              </button>
+            )}
+            {/*------------------------------*/}
 
           </div>
         </div>

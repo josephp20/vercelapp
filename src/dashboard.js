@@ -3,7 +3,10 @@ import { supabase } from "./supabaseClient";
 
 export default function TaskDashboard() {
 
+  //bring the data from the table tasks, and user
   const [userEmail, setUserEmail] = useState("");
+
+
 
   useEffect(() => {
 
@@ -29,6 +32,10 @@ export default function TaskDashboard() {
   //list task
 
     const [tasks, setTasks] = useState([]);
+  //bring the data from the table tasks, and user
+    const [pending, setPending] = useState(0);
+    const [inProgress, setInProgress] = useState(0);
+    const [completed, setCompleted] = useState(0);
 
   // -------------------------------
   // listing tasks
@@ -43,6 +50,15 @@ export default function TaskDashboard() {
       alert("No data");
     } else {
       setTasks(data);
+
+      //new code to bring the data from the tasks
+      const pendingCount = data.filter((task) => task.status === "todo").length;
+      const inProgressCount = data.filter((task) => task.status === "in_progress").length;
+      const completedCount = data.filter((task) => task.status === "done").length;
+
+      setPending(pendingCount);
+      setInProgress(inProgressCount);
+      setCompleted(completedCount);
     }
   };
 
@@ -73,28 +89,36 @@ export default function TaskDashboard() {
       <div className="row mb-4">
 
         <div className="col-md-4">
-          <div className="card text-white bg-primary">
+          <div className="card bg-primary-subtle text-primary border-0 shadow-sm rounded-3">
             <div className="card-body">
               <h5 className="card-title">Pending Tasks</h5>
-              <p className="card-text">5</p>
+                      
+              {/* Task summary cards */}
+                      <p className="card-text">{pending}</p>
+              {/* Task summary cards */}
+
             </div>
           </div>
         </div>
 
         <div className="col-md-4">
-          <div className="card text-white bg-info">
+          <div className="card text-info bg-info-subtle shadow-sm  border-0 rounded-3">
             <div className="card-body">
               <h5 className="card-title">In Progress</h5>
-              <p className="card-text">3</p>
+              {/* Task summary cards */}
+                      <p className="card-text">{inProgress}</p>
+              {/* Task summary cards */}
             </div>
           </div>
         </div>
 
         <div className="col-md-4">
-          <div className="card text-white bg-success">
+          <div className="card text-sucess bg-success-subtle border-0 rounded-3">
             <div className="card-body">
               <h5 className="card-title">Completed</h5>
-              <p className="card-text">8</p>
+              {/* Task summary cards */}
+                      <p className="card-text">{completed}</p>
+              {/* Task summary cards */}
             </div>
           </div>
         </div>
@@ -109,7 +133,9 @@ export default function TaskDashboard() {
         <div className="col-md-12">
 
           <h4>My Tasks</h4>
-
+        
+         {/*table responsive */}
+         <div class="table-responsive">
          <table className="table table-striped table-hover table-bordered">
               <thead>
                 <tr>
@@ -148,6 +174,8 @@ export default function TaskDashboard() {
             ))}
             </tbody>
         </table>
+        </div>
+            {/*table responsive */}
 
         </div>
 
