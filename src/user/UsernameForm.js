@@ -16,8 +16,8 @@ export default function UserForm(){
 
     //-----------------------------
     //adding permission:
-    const [currentUser, setCurrentUser] = useState(null);
-    const [currentRole, setCurrentRole] = useState("");
+    //const [currentUser, setCurrentUser] = useState(null);
+    //const [currentRole, setCurrentRole] = useState("");
     //-----------------------------
 
  const clearForm = () => {
@@ -234,8 +234,7 @@ export default function UserForm(){
                 <div class="d-md-flex justify-content-start align-items-center mb-4 py-2">
 
 
-                  {currentRole === "admin" ? (
-                  <>
+                 
                     <div className="form-check form-check-inline mb-0 me-4">
                       <input
                         className="form-check-input border-secondary"
@@ -257,8 +256,8 @@ export default function UserForm(){
                       />
                       <label className="form-check-label">Admin</label>
                     </div>
-                  </>
-                ) : (
+                  
+                
                   <div className="form-check form-check-inline mb-0 me-4">
                     <input
                       className="form-check-input border-secondary"
@@ -269,7 +268,7 @@ export default function UserForm(){
                     />
                     <label className="form-check-label">User</label>
                   </div>
-                )}
+                
 
 
                   
