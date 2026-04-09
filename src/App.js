@@ -18,6 +18,9 @@ import ViewUser from './user/ViewUser';
 import SignUser from './login/SignupUser';
 import LoginUser from './login/LoginUser';
 
+//about page
+import AboutPage from './pages/about';
+
 // Team
 import TeamForm from './team/TeamForm';
 import CreateTeam from './team/CreateTeam';
@@ -120,6 +123,10 @@ function App() {
                     <li className="nav-item">
                       <Link className="nav-link" to="/login">Login</Link>
                     </li>
+                   
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/about">About</Link>
+                    </li>
                   </>
                 )}
 
@@ -155,6 +162,8 @@ function App() {
 
           <Route path="/signup" element={<SignUser />} />
           <Route path="/login" element={<LoginUser />} />
+          {/*about page*/}
+          <Route path="/about" element={<AboutPage />} />
 
           {/* PROTECTED ROUTES */}
 
