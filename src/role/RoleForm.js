@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { supabase } from '../supabaseClient'; // Adjust our path
+import { supabase } from "../supabaseClient"; // Adjust our path
 
 export default function RoleForm() {
-  // stting all the data
+  // setting all the data
   const [teamName, setTeamName] = useState("");
   const [description, setDescription] = useState("");
   const [administrator, setAdministrator] = useState("no");
@@ -10,12 +10,57 @@ export default function RoleForm() {
   const [roles, setRoles] = useState([]);
   const [editingId, setEditingId] = useState(null);
 
+  // validation errors
+  const [errors, setErrors] = useState({});
+
+  // -------------------------------
+  // helpers
+  const cleanText = (text) => text.trim();
+
+  const onlyValidText = (text) => {
+    return /^[a-zA-Z0-9\s.,\-_/()#&]+$/.test(text);
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    const cleanTeamName = cleanText(teamName);
+    const cleanDescription = cleanText(description);
+
+    // Team Name
+    if (!cleanTeamName) {
+      newErrors.teamName = "Team name is required.";
+    } else if (cleanTeamName.length < 2) {
+      newErrors.teamName = "Team name must have at least 2 characters.";
+    } else if (cleanTeamName.length > 40) {
+      newErrors.teamName = "Team name cannot be longer than 40 characters.";
+    } else if (!onlyValidText(cleanTeamName)) {
+      newErrors.teamName = "Team name contains invalid characters.";
+    }
+
+    // Description
+    if (!cleanDescription) {
+      newErrors.description = "Description is required.";
+    } else if (cleanDescription.length < 5) {
+      newErrors.description = "Description must have at least 5 characters.";
+    } else if (cleanDescription.length > 200) {
+      newErrors.description = "Description cannot be longer than 200 characters.";
+    } else if (!onlyValidText(cleanDescription)) {
+      newErrors.description = "Description contains invalid characters.";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   // -------------------------------
   // create user role
   const addRole = async () => {
+    if (!validateForm()) return;
+
     const newRole = {
-      team_name: teamName,
-      description,
+      team_name: teamName.trim(),
+      description: description.trim(),
       administrator,
     };
 
@@ -53,31 +98,38 @@ export default function RoleForm() {
   // -------------------------------
   // function of delete
   const deleteRole = async (id) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this role?");
+    if (!confirmDelete) return;
+
     const { error } = await supabase.from("role").delete().eq("id", id);
+
     if (error) {
       console.error("Error deleting role:", error);
+      alert("Error deleting role");
     } else {
       setRoles(roles.filter((role) => role.id !== id));
     }
   };
 
   // -------------------------------
-
   const editRole = (role) => {
     setEditingId(role.id);
-    setTeamName(role.team_name);
-    setDescription(role.description);
-    setAdministrator(role.administrator);
+    setTeamName(role.team_name || "");
+    setDescription(role.description || "");
+    setAdministrator(role.administrator || "no");
+    setErrors({});
   };
 
   // -------------------------------
   // UPDATE
   const updateRole = async () => {
+    if (!validateForm()) return;
+
     const { data, error } = await supabase
       .from("role")
       .update({
-        team_name: teamName,
-        description,
+        team_name: teamName.trim(),
+        description: description.trim(),
         administrator,
       })
       .eq("id", editingId)
@@ -99,13 +151,13 @@ export default function RoleForm() {
     setTeamName("");
     setDescription("");
     setAdministrator("no");
+    setErrors({});
   };
 
   // -------------------------------
   return (
     <div className="container-xl">
       <div className="row">
-
         <div className="col-lg-6 col-md-6 col-sm-12">
           <div className="card card-registration my-4">
             <div className="row g-0">
@@ -119,8 +171,11 @@ export default function RoleForm() {
                       value={teamName}
                       onChange={(e) => setTeamName(e.target.value)}
                       placeholder="Team Name"
-                      className="form-control form-control-lg border-secondary"
+                      className={`form-control form-control-lg border-secondary ${errors.teamName ? "is-invalid" : ""}`}
                     />
+                    {errors.teamName && (
+                      <div className="invalid-feedback">{errors.teamName}</div>
+                    )}
                   </div>
 
                   <div className="form-outline mb-4">
@@ -128,9 +183,12 @@ export default function RoleForm() {
                       value={description}
                       onChange={(e) => setDescription(e.target.value)}
                       placeholder="Description"
-                      className="form-control form-control-lg border-secondary"
+                      className={`form-control form-control-lg border-secondary ${errors.description ? "is-invalid" : ""}`}
                       rows="3"
                     ></textarea>
+                    {errors.description && (
+                      <div className="invalid-feedback">{errors.description}</div>
+                    )}
                   </div>
 
                   <label className="form-label">Administrator</label>
@@ -158,7 +216,11 @@ export default function RoleForm() {
                   </div>
 
                   <div className="d-flex justify-content-end pt-3">
-                    <button type="button" className="btn btn-light btn-lg me-2" onClick={clearForm}>
+                    <button
+                      type="button"
+                      className="btn btn-light btn-lg me-2"
+                      onClick={clearForm}
+                    >
                       Clear
                     </button>
                     <button
@@ -169,7 +231,6 @@ export default function RoleForm() {
                       {editingId ? "Update Role" : "Add Role"}
                     </button>
                   </div>
-
                 </div>
               </div>
             </div>
@@ -197,17 +258,31 @@ export default function RoleForm() {
                     <td>{role.team_name}</td>
                     <td>{role.description}</td>
                     <td>
-                      <span className={`badge ${role.administrator === "yes" ? "bg-success" : "bg-secondary"}`}>
+                      <span
+                        className={`badge ${
+                          role.administrator === "yes"
+                            ? "bg-success"
+                            : "bg-secondary"
+                        }`}
+                      >
                         {role.administrator}
                       </span>
                     </td>
                     <td>
-                      <button type="button" className="btn btn-info btn-sm" onClick={() => editRole(role)}>
+                      <button
+                        type="button"
+                        className="btn btn-info btn-sm"
+                        onClick={() => editRole(role)}
+                      >
                         Edit
                       </button>
                     </td>
                     <td>
-                      <button type="button" className="btn btn-danger btn-sm" onClick={() => deleteRole(role.id)}>
+                      <button
+                        type="button"
+                        className="btn btn-danger btn-sm"
+                        onClick={() => deleteRole(role.id)}
+                      >
                         Delete
                       </button>
                     </td>
@@ -215,9 +290,12 @@ export default function RoleForm() {
                 ))}
               </tbody>
             </table>
+
+            {roles.length === 0 && (
+              <p className="text-center mt-3">No roles found.</p>
+            )}
           </div>
         </div>
-
       </div>
     </div>
   );
