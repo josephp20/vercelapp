@@ -27,6 +27,14 @@ export default function TaskForm() {
     return /^[a-zA-Z0-9\s.,\-_/()#&]+$/.test(text);
   };
 
+  //new constant for filter
+  const [statusFilter, setStatusFilter] = useState("all")
+
+  //new constant for CREATION Dates
+  const [creationDateFilter, setcreationDateFilter] = useState("")
+
+
+
   const validateForm = () => {
     const newErrors = {};
 
@@ -211,6 +219,22 @@ export default function TaskForm() {
   };
 
   // -------------------------------
+  //main filter
+  let filterTasks = [];
+
+
+if(statusFilter === "all"){
+  filterTasks = tasks;
+}else{
+filterTasks = tasks.filter((task)=> task.status === statusFilter);
+}
+
+
+if(creationDateFilter !== ""){
+  filterTasks = filterTasks.filter((task)=> task.creation === creationDateFilter);
+}
+
+
   return (
     <div className="container-xl">
       <div className="row">
@@ -383,6 +407,52 @@ export default function TaskForm() {
         <div className="col-lg-6 col-md-6 col-sm-12">
           <div className="table-responsive">
             <br />
+          
+          
+          {/* Filter by status */}
+
+          <div className="my-4">
+
+            <p>filter by STATUS</p>
+              <select 
+
+              class="form-select border-secondary" 
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              >
+
+
+                <option value="all">All the Status</option>
+                <option value="done">Done</option>
+                <option value="in_progress">In progress</option>
+                <option value="todo">To do</option>
+              </select>
+          </div>
+          {/* ----------------- */}
+
+
+          {/* Filter by CREATION DATE */}
+
+          <div className="my-4">
+
+            <p>filter by CREATION DATE</p>
+            <input
+                type="date"
+                value={creationDateFilter}
+                onChange={(e) => setcreationDateFilter (e.target.value)}
+                className={`form-control form-control border-secondary`}
+              />
+              <button
+                      type="button"
+                      className="btn btn-primary btn-lg me-2"
+                      onClick={() => setcreationDateFilter("")}
+                    >
+                      Clear
+                    </button>
+
+          </div>
+          {/* ----------------- */}
+
             <table className="table table-striped table-hover table-bordered">
               <thead>
                 <tr>
@@ -400,7 +470,7 @@ export default function TaskForm() {
               </thead>
 
               <tbody>
-                {tasks.map((task) => (
+                {filterTasks.map((task) => (
                   <tr key={task.id}>
                     <td>{task.id}</td>
                     <td>{task.title}</td>
